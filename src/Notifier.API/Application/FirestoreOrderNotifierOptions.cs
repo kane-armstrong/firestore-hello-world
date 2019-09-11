@@ -4,6 +4,6 @@ namespace Notifier.API.Application
     {
         public string ProjectId { get; set; }
         public bool UseDevelopmentCredentials { get; set; }
-        public string JsonCredentials { get; set; }
+        public string JsonCredentialsPath { get; set; }
     }
 }

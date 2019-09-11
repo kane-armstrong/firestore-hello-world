@@ -1,10 +1,10 @@
+using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Google.Cloud.Firestore;
-using Google.Cloud.Firestore.V1;
-using Microsoft.Extensions.Options;
 
 namespace Notifier.API.Application
 {
@@ -15,8 +15,14 @@ namespace Notifier.API.Application
         public FirestoreOrderChangeNotifier(IOptions<FirestoreOrderNotifierOptions> options)
         {
             _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            if (!_options.UseDevelopmentCredentials && string.IsNullOrWhiteSpace(_options.JsonCredentialsPath))
+            {
+                throw new ArgumentException(
+                    "A JSON credentials file is required to authenticate with the Firebase project.",
+                    nameof(FirestoreOrderNotifierOptions.JsonCredentialsPath));
+            }
         }
-        
+
         public async Task NotifyOrderChanged(int locationId, int orderId)
         {
             var db = await InitializeDb();
@@ -34,13 +40,12 @@ namespace Notifier.API.Application
             {
                 JsonCredentials = _options.UseDevelopmentCredentials
                     ? await File.ReadAllTextAsync(Path.Combine(Directory.GetCurrentDirectory(), "firestore_key.json"))
-                    : _options.JsonCredentials
+                    : await File.ReadAllTextAsync(_options.JsonCredentialsPath)
             };
 
             var client = await builder.BuildAsync();
-            
-            var db = await FirestoreDb.CreateAsync(_options.ProjectId, client);
-            return db;
+
+            return await FirestoreDb.CreateAsync(_options.ProjectId, client);
         }
     }
 }

@@ -350,3 +350,5 @@ MigrationBackup/
 
 .idea/
 .DS_STORE
+src/Notifier.API/firestore_key.json
+src/Notifier.StatusChangeListener/firestore_key.json
