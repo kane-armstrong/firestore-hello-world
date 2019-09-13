@@ -26,7 +26,7 @@ This is pretty unhelpful for a JavaScript client though
 
 This is configured to take a json key file as exported from the Google console.
 
-* If using Kubernetes, you could set this as a secret in there
-* Could also inject/use volumes/etc to get the json key to the container
-* Put the json blob in KeyVault (max of 25k bytes, key seems to generally be less than 5k bytes)
+* If using Kubernetes, you could set this as a secret in there in base64 format
+* Could also inject/use volumes/etc to get the json key into the container as a file
+* Or you could put the json file in KeyVault (max of 25k bytes, key seems to generally be less than 5k bytes)
 * Avoid environment variables unless those can be permanently masked in whatever you're shipping to
