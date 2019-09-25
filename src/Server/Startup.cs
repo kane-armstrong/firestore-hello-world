@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Notifier.API.Application;
+using Server.Application;
 
-namespace Notifier.API
+namespace Server
 {
     public class Startup
     {
@@ -25,13 +25,12 @@ namespace Notifier.API
             services.AddControllers();
             services.AddOptions();
 
-            var settings = Configuration.GetSection(nameof(FirestoreOrderNotifierOptions)).Get<FirestoreOrderNotifierOptions>();
+            var settings = Configuration.GetSection(nameof(FirestoreAdviserNotifierOptions)).Get<FirestoreAdviserNotifierOptions>();
             services.AddSingleton(_ =>
             {
                 var builder = new FirestoreClientBuilder
                 {
-                    JsonCredentials = Encoding.UTF8.GetString(
-                        Convert.FromBase64String(settings.FirebaseCredentials))
+                    JsonCredentials = Encoding.UTF8.GetString(Convert.FromBase64String(settings.FirebaseCredentials))
                 };
             
                 var client = builder.Build();
@@ -39,8 +38,8 @@ namespace Notifier.API
                 return FirestoreDb.Create(settings.ProjectId, client);
             });
             
-            services.Configure<FirestoreOrderNotifierOptions>(Configuration.GetSection(nameof(FirestoreOrderNotifierOptions)));
-            services.AddScoped<IOrderChangeNotifier, FirestoreOrderChangeNotifier>();
+            services.Configure<FirestoreAdviserNotifierOptions>(Configuration.GetSection(nameof(FirestoreAdviserNotifierOptions)));
+            services.AddScoped<IAdviserNotifier, FirestoreAdviserNotifier>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,6 +1,6 @@
-namespace Notifier.API.Application
+namespace Server.Application
 {
-    public class FirestoreOrderNotifierOptions
+    public class FirestoreAdviserNotifierOptions
     {
         public string ProjectId { get; set; }
         public string FirebaseCredentials { get; set; }
