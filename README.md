@@ -10,8 +10,7 @@ This is obviously contrived -- just an excuse to toy with Firestore as a mechani
 ## Setup
 
 I created a Firebase project, a Firestore database on said project, exported the Firebase Admin SDK credentials
-(Project Settings > Service accounts), base64 encoded the exported json, copied that into appsettings.json, then hit run. 
-For the client I ran `dotnet run Client <base64 string>`
+(Project Settings > Service accounts), base64 encoded the exported json, and copied that into appsettings.json.
 
 ## Usage
 
