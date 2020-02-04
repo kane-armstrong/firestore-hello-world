@@ -26,6 +26,7 @@ namespace FirestoreSandbox
         {
             await CreateFamily();
             await UpdateFamilyMembers();
+            await UpdateSpecificFamilyMember();
         }
 
         private async Task CreateFamily()
@@ -61,6 +62,26 @@ namespace FirestoreSandbox
                 var documentUpdates = new Dictionary<string, object>
                 {
                     { "members", members }
+                };
+
+                transaction.Update(doc, documentUpdates);
+            });
+        }
+
+        private async Task UpdateSpecificFamilyMember()
+        {
+            await _db.RunTransactionAsync(async transaction =>
+            {
+                var doc = _db.Collection("families").Document(Family.Id.ToString());
+                var snapshot = await doc.GetSnapshotAsync();
+                var family = snapshot.GetValue<FamilyMember[]>("members");
+                var toUpdate = family[1];
+                toUpdate.Age++;
+                family[1] = toUpdate;
+
+                var documentUpdates = new Dictionary<string, object>
+                {
+                    { "members", family }
                 };
 
                 transaction.Update(doc, documentUpdates);
