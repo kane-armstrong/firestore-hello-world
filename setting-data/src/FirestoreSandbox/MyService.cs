@@ -75,9 +75,7 @@ namespace FirestoreSandbox
                 var doc = _db.Collection("families").Document(Family.Id.ToString());
                 var snapshot = await doc.GetSnapshotAsync();
                 var family = snapshot.GetValue<FamilyMember[]>("members");
-                var toUpdate = family[1];
-                toUpdate.Age++;
-                family[1] = toUpdate;
+                family[1].Age++;
 
                 var documentUpdates = new Dictionary<string, object>
                 {
